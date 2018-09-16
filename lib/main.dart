@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'alarm.dart';
 
 class App extends StatefulWidget {
@@ -16,12 +17,14 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
+    _startClock();
     _list = ListModel<int>(
       listKey: _listKey,
-      initialItems: <int>[0, 1, 2],
+      initialItems: <int>[0],
       removedItemBuilder: _buildRemovedItem,
+      alarm: Alarm("Alarm ${0}", DateTime.now().minute + 1, null, null)
     );
-    _nextItem = 3;
+    _nextItem = 1;
   }
 
   // Used to build list items that haven't been removed.
@@ -71,6 +74,24 @@ class _AppState extends State<App> {
     }
   }
 
+  // Start the clock to check every minute for an alarm
+  void _startClock(){
+    //Await until next whole minute? Time.now 
+    Timer.periodic(const Duration(minutes:1), (_) {
+      print(">>${DateTime.now().minute}");
+      _checkAlarm();
+    });
+  }
+
+  //Declare a function to check the list for an alarm every tick
+  void _checkAlarm(){
+    for(int i = 0; i < _list.length; i++){
+      if(_list.alarm.time <= DateTime.now().minute){
+        print("beep beep");
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -116,13 +137,16 @@ class ListModel<E> {
   ListModel({
     @required this.listKey,
     @required this.removedItemBuilder,
+    @required this.alarm,
     Iterable<E> initialItems,
   })  : assert(listKey != null),
         assert(removedItemBuilder != null),
+        assert(alarm != null),
         _items = List<E>.from(initialItems ?? <E>[]);
 
   final GlobalKey<AnimatedListState> listKey;
   final dynamic removedItemBuilder;
+  final Alarm alarm;
   final List<E> _items;
 
   AnimatedListState get _animatedList => listKey.currentState;
@@ -154,7 +178,7 @@ class ListModel<E> {
 /// the item's value. The text is displayed in bright green if selected is true.
 /// This widget's height is based on the animation parameter, it varies
 /// from 0 to 128 as the animation varies from 0.0 to 1.0.
-class CardItem extends StatelessWidget {
+class CardItem extends StatelessWidget {                                //Card Item takes in an object with the required variables. Insert alarm data with it.
   const CardItem(
       {Key key,
       @required this.animation,
@@ -187,9 +211,9 @@ class CardItem extends StatelessWidget {
           child: SizedBox(
             height: 128.0,
             child: Card(
-              color: Colors.primaries[item % Colors.primaries.length],
+              color: Colors.lightBlue,
               child: Center(
-                child: Text('Item $item', style: textStyle),
+                child: Text('Alarm $item', style: textStyle),
               ),
             ),
           ),
@@ -199,6 +223,6 @@ class CardItem extends StatelessWidget {
   }
 }
 
-void main() {
+main() {
   runApp(App());
 }
