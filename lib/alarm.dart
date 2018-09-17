@@ -1,6 +1,5 @@
 class Alarm{
-  static var alarmsList = List();
-
+  static int numOfAlarms;
   var name;
   var time; //format will be HHmm
   var repeatedFor = {
@@ -15,18 +14,19 @@ class Alarm{
   bool alarmSet;
   var sound;
 
-  Alarm(var n, var t, var r, var s){
+  Alarm(var n, var t, var s){
+    if(numOfAlarms == null) numOfAlarms = 0;
     if(n == null)
-      name = "Alarm ${alarmsList.length + 1}";
+      this.name = "Alarm $numOfAlarms";
     else
-      name = n;
-    time = t;
-  //set repeated
-    sound = s;
+      this.name = n;
+    this.time = t;
+    this.sound = s;
 
-    alarmsList.add(this);
+    this.alarmSet = true;
+    numOfAlarms++;
   }
-
+  
   void removeAlarm(var name){
     //find alarm by name and remove it from list of alarms
   }

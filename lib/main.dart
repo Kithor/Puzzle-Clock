@@ -10,19 +10,18 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
-  ListModel<int> _list;
-  int _selectedItem;
+  ListModel _list;
+  var _selectedItem;
   int _nextItem; // The next item inserted when the user presses the '+' button.
 
   @override
   void initState() {
     super.initState();
     _startClock();
-    _list = ListModel<int>(
+    _list = ListModel(
       listKey: _listKey,
-      initialItems: <int>[0],
+      initialItems: [Alarm("Default", DateTime.now().minute + 1, null)],
       removedItemBuilder: _buildRemovedItem,
-      alarm: Alarm("Alarm ${0}", DateTime.now().minute + 1, null, null)
     );
     _nextItem = 1;
   }
@@ -48,7 +47,7 @@ class _AppState extends State<App> {
   // The widget will be used by the [AnimatedListState.removeItem] method's
   // [AnimatedListRemovedItemBuilder] parameter.
   Widget _buildRemovedItem(
-      int item, BuildContext context, Animation<double> animation) {
+      var item, BuildContext context, Animation<double> animation) {
     return CardItem(
       animation: animation,
       item: item,
@@ -61,7 +60,7 @@ class _AppState extends State<App> {
   void _insert() {
     final int index =
         _selectedItem == null ? _list.length : _list.indexOf(_selectedItem);
-    _list.insert(index, _nextItem++);
+    _list.insert(index, new Alarm(null, DateTime.now().minute + 1, null));
   }
 
   // Remove the selected item from the list model.
@@ -79,16 +78,15 @@ class _AppState extends State<App> {
     //Await until next whole minute? Time.now 
     Timer.periodic(const Duration(minutes:1), (_) {
       print(">>${DateTime.now().minute}");
-      _checkAlarm();
+      _list._items.forEach((element) => _checkAlarm(element));
     });
   }
 
   //Declare a function to check the list for an alarm every tick
-  void _checkAlarm(){
-    for(int i = 0; i < _list.length; i++){
-      if(_list.alarm.time <= DateTime.now().minute){
-        print("beep beep");
-      }
+  void _checkAlarm(alarm){
+    if(alarm.time <= DateTime.now().minute && alarm.alarmSet == true){
+      print("beep beep");
+      alarm.alarmSet = false;
     }
   }
 
@@ -97,7 +95,7 @@ class _AppState extends State<App> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('AnimatedList'),
+          title: const Text('On Time'),
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.add_circle),
@@ -137,16 +135,13 @@ class ListModel<E> {
   ListModel({
     @required this.listKey,
     @required this.removedItemBuilder,
-    @required this.alarm,
     Iterable<E> initialItems,
   })  : assert(listKey != null),
         assert(removedItemBuilder != null),
-        assert(alarm != null),
         _items = List<E>.from(initialItems ?? <E>[]);
 
   final GlobalKey<AnimatedListState> listKey;
   final dynamic removedItemBuilder;
-  final Alarm alarm;
   final List<E> _items;
 
   AnimatedListState get _animatedList => listKey.currentState;
@@ -186,13 +181,13 @@ class CardItem extends StatelessWidget {                                //Card I
       @required this.item,
       this.selected: false})
       : assert(animation != null),
-        assert(item != null && item >= 0),
+        assert(item != null),
         assert(selected != null),
         super(key: key);
 
   final Animation<double> animation;
   final VoidCallback onTap;
-  final int item;
+  final item;
   final bool selected;
 
   @override
@@ -213,7 +208,7 @@ class CardItem extends StatelessWidget {                                //Card I
             child: Card(
               color: Colors.lightBlue,
               child: Center(
-                child: Text('Alarm $item', style: textStyle),
+                child: Text(item.name, style: textStyle),
               ),
             ),
           ),
