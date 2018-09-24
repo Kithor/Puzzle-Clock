@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'alarm.dart';
+import 'clock.dart';
 
 class App extends StatefulWidget {
   @override
@@ -12,18 +13,17 @@ class _AppState extends State<App> {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
   ListModel _list;
   var _selectedItem;
-  int _nextItem; // The next item inserted when the user presses the '+' button.
 
   @override
   void initState() {
     super.initState();
     _startClock();
+    Clock.init();
     _list = ListModel(
       listKey: _listKey,
       initialItems: [Alarm("Default", DateTime.now().minute + 1, null)],
       removedItemBuilder: _buildRemovedItem,
     );
-    _nextItem = 1;
   }
 
   // Used to build list items that haven't been removed.
