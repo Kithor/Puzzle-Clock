@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'alarm.dart';
-import 'clock.dart';
 
 class App extends StatefulWidget {
   @override
@@ -17,8 +16,12 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
-    _startClock();
-    Clock.init();
+    new Timer.periodic(new Duration(milliseconds: 5), (timer) {
+      if(DateTime.now().second == 00){
+        _startClock();
+        timer.cancel();
+      }
+    });
     _list = ListModel(
       listKey: _listKey,
       initialItems: [Alarm("Default", DateTime.now().minute + 1, null)],
@@ -84,9 +87,10 @@ class _AppState extends State<App> {
 
   //Declare a function to check the list for an alarm every tick
   void _checkAlarm(alarm){
-    if(alarm.time <= DateTime.now().minute && alarm.alarmSet == true){
-      print("beep beep");
-      alarm.alarmSet = false;
+    if(alarm.time <= DateTime.now().minute && alarm.isSet == true){
+      print('beep');
+      alarm.isSet = false;
+      alarm.start();
     }
   }
 

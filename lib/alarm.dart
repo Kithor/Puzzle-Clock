@@ -3,15 +3,9 @@ class Alarm{
   var name;
   var time; //format will be HHmm
   var repeatedFor = {
-    'Mo':'',
-    'Tu':'',
-    'We':'',
-    'Th':'',
-    'Fr':'',
-    'Sa':'',
-    'Su':''
+    'Mo':'', 'Tu':'', 'We':'', 'Th':'', 'Fr':'', 'Sa':'', 'Su':''
   };
-  bool alarmSet;
+  bool isSet;
   var sound;
 
   Alarm(var n, var t, var s){
@@ -23,12 +17,19 @@ class Alarm{
     this.time = t;
     this.sound = s;
 
-    this.alarmSet = true;
+    this.isSet = true;
     numOfAlarms++;
   }
   
   void removeAlarm(var name){
     //find alarm by name and remove it from list of alarms
+  }
+
+  void start(){
+    /* Start a loop playing the sound until puzzle is complete.
+    We will probably want to play with isolates here. I don't think
+    we will be able to run both a puzzle and the sound. If anyone
+    wants to look into that.*/
   }
 }
 
