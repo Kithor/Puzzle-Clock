@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'alarm.dart';
+import 'edit.dart';
 
 class App extends StatefulWidget {
   @override
@@ -109,6 +110,12 @@ class _AppState extends State<App> {
             IconButton(
               icon: const Icon(Icons.remove_circle),
               onPressed: _remove,
+              //onPressed: () {
+              //Navigator.push(
+              //context,
+              //MaterialPageRoute(builder: (context) => SecondScreen()),
+              //),
+              //},
               tooltip: 'remove the selected item',
             ),
           ],
