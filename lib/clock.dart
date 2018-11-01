@@ -10,7 +10,7 @@ var prefs;
   prefs = await SharedPreferences.getInstance();
 }*/
 
-bool isInit(){
+/*bool isInit(){
   //grab data from storage and check if clock is running
   bool isInit = prefs.getBool('clockStarted') ?? false;
   if(isInit){
@@ -42,4 +42,4 @@ void init(ReceivePort port) async {
   }
   
   return;
-}  
+}*/ 

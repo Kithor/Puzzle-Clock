@@ -104,18 +104,18 @@ class _AppState extends State<App> {
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.add_circle),
-              onPressed: _insert,
+              //onPressed: _insert,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EditAlarm()),
+                );
+              },
               tooltip: 'insert a new item',
             ),
             IconButton(
               icon: const Icon(Icons.remove_circle),
               onPressed: _remove,
-              //onPressed: () {
-              //Navigator.push(
-              //context,
-              //MaterialPageRoute(builder: (context) => SecondScreen()),
-              //),
-              //},
               tooltip: 'remove the selected item',
             ),
           ],
@@ -230,5 +230,9 @@ class CardItem extends StatelessWidget {                                //Card I
 }
 
 main() {
-  runApp(App());
+  runApp(
+    new MaterialApp(
+      home: App(),
+    )
+  );
 }
