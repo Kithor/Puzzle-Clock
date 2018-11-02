@@ -25,7 +25,7 @@ class _AppState extends State<App> {
     });
     _list = ListModel(
       listKey: _listKey,
-      initialItems: [Alarm("Default", DateTime.now().minute + 1, null)],
+      initialItems: Alarm.alarmList,//[Alarm("Default", DateTime.now().minute + 1, null)],
       removedItemBuilder: _buildRemovedItem,
     );
   }
@@ -61,10 +61,10 @@ class _AppState extends State<App> {
   }
 
   // Insert the "next item" into the list model.
-  void _insert() {
+  void _insert(Alarm alarm) {
     final int index =
         _selectedItem == null ? _list.length : _list.indexOf(_selectedItem);
-    _list.insert(index, new Alarm(null, DateTime.now().minute + 1, null));
+    _list.insert(index, alarm);
   }
 
   // Remove the selected item from the list model.

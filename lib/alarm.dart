@@ -1,24 +1,22 @@
 class Alarm{
-  static int numOfAlarms;
+  static List<Alarm> alarmList = [];
   var name;
-  var time; //format will be HHmm
+  var time;
   var repeatedFor = {
     'Mo':'', 'Tu':'', 'We':'', 'Th':'', 'Fr':'', 'Sa':'', 'Su':''
   };
   bool isSet;
   var sound;
 
-  Alarm(var n, var t, var s){
-    if(numOfAlarms == null) numOfAlarms = 0;
-    if(n == null)
-      this.name = "Alarm $numOfAlarms";
-    else
-      this.name = n;
-    this.time = t;
-    this.sound = s;
+  Alarm(){
+    this.name = null;
+    this.time = null;
+    this.isSet = false;
+  }
 
+  Alarm.fromData(this.name, this.time, this.sound){
     this.isSet = true;
-    numOfAlarms++;
+    alarmList.add(this);
   }
   
   void removeAlarm(var name){
