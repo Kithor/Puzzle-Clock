@@ -9,7 +9,7 @@ class App extends StatefulWidget {
   _AppState createState() => _AppState();
 }
 
-class _AppState extends State<App> {
+class _AppState extends State<App> with RouteAware{
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
   ListModel _list;
   var _selectedItem;
@@ -105,7 +105,8 @@ class _AppState extends State<App> {
             IconButton(
               icon: const Icon(Icons.add_circle),
               //onPressed: _insert,
-              onPressed: () {
+              onPressed: (){
+                dispose();
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => EditAlarm()),

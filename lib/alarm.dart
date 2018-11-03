@@ -9,8 +9,8 @@ class Alarm{
   var sound;
 
   Alarm(){
-    this.name = null;
-    this.time = null;
+    this.name = 'defaut';
+    this.time = '12:00';
     this.isSet = false;
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/time_picker_formfield.dart';
+import 'main.dart';
 import 'alarm.dart';
 
 class EditAlarm extends StatefulWidget{
@@ -15,8 +16,11 @@ class _EditAlarmState extends State<EditAlarm>{
   void submit(){
     _formKey.currentState.save();
     Alarm.fromData(_alarm.name, _alarm.time, null);
-    print(Alarm.alarmList[0].time);
-    Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => App()),
+    );
+    //Navigator.pop(context);
   }
 
   @override
