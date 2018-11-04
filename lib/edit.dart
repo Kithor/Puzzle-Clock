@@ -21,8 +21,6 @@ class _EditAlarmState extends State<EditAlarm>{
 
   @override
   Widget build (BuildContext context){
-    var time = new DateTime.now();
-
     return Scaffold(
       appBar: AppBar(
         title: Text("New Alarm")
@@ -33,35 +31,41 @@ class _EditAlarmState extends State<EditAlarm>{
           key: this._formKey,
           child: ListView(
             children: <Widget>[
+              TextFormField(
+                  decoration: InputDecoration(labelText: 'Name'),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please enter an alarm name';
+                    }
+                  },
+                  onSaved: (value){
+                    this._alarm.name = value;
+                  }
+                ),
               TimePickerFormField(
                 format: DateFormat("h:mm a"),
                 decoration: InputDecoration(labelText: 'Time'),
+                validator: (value) {
+                  if (value.toString().isEmpty) {
+                    return 'Please enter a time';
+                  }
+                },
                 onSaved: (value){
                   this._alarm.time = value;
                 }
               ),
               RaisedButton(
                 child: const Text('Save'),
-                onPressed: this.submit
+                onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                      this.submit();
+                  }
+                }
               )
             ],
           )
         )
       )
-        /*children: <Widget>[
-          Text('Set the Alarm!'),
-          Text(time.toString()),
-
-          //https://docs.flutter.io/flutter/material/showDatePicker.html
-          //This seems to be a date picker wheel, but I have questions
-
-          new RaisedButton(
-            onPressed: (){
-              // Add Alarm
-              // Navigator.pop(context);
-          },
-        ),
-      ],*/
     );
   }
 }
