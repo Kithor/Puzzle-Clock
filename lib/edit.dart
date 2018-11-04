@@ -55,7 +55,10 @@ class _EditAlarmState extends State<EditAlarm>{
                   }
                 },
                 onSaved: (value){
-                  this._alarm.time = value;
+                  var now = DateTime.now();
+                  this._alarm.time = new DateTime(now.year, now.month, now.day, value.hour, value.minute);
+                  print(now);
+                  print(this._alarm.time);
                 }
               ),
               RaisedButton(

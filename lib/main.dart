@@ -17,17 +17,13 @@ class _AppState extends State<App> with RouteAware{
   @override
   void initState() {
     super.initState();
-    new Timer.periodic(new Duration(milliseconds: 5), (timer) {
-      if(DateTime.now().second == 00){
-        _startClock();
-        timer.cancel();
-      }
-    });
     _list = ListModel(
       listKey: _listKey,
       initialItems: Alarm.alarmList,//[Alarm("Default", DateTime.now().minute + 1, null)],
       removedItemBuilder: _buildRemovedItem,
     );
+    print(_list._items);
+    _startClock();
   }
 
   // Used to build list items that haven't been removed.
@@ -70,7 +66,9 @@ class _AppState extends State<App> with RouteAware{
   // Remove the selected item from the list model.
   void _remove() {
     if (_selectedItem != null) {
+      print(_list.indexOf(_selectedItem));
       _list.removeAt(_list.indexOf(_selectedItem));
+      Alarm.alarmList.removeAt(Alarm.alarmList.indexOf(_selectedItem));
       setState(() {
         _selectedItem = null;
       });
@@ -79,19 +77,26 @@ class _AppState extends State<App> with RouteAware{
 
   // Start the clock to check every minute for an alarm
   void _startClock(){
-    //Await until next whole minute? Time.now 
-    Timer.periodic(const Duration(minutes:1), (_) {
-      print(">>${DateTime.now().minute}");
-      _list._items.forEach((element) => _checkAlarm(element));
+    new Timer.periodic(new Duration(milliseconds: 5), (syncTimer) { //Sync Timer (syncTimer)
+      if(DateTime.now().second == 00){
+        Timer.periodic(const Duration(minutes:1), (periodTimer) { //Periodic Timer (_)
+          print(">>${DateTime.now().minute}");
+          Alarm.alarmList.forEach((element) => _checkAlarm(element));
+        });
+        syncTimer.cancel();
+      }
     });
   }
 
-  //Declare a function to check the list for an alarm every tick
+  //A function to check the list for an alarm every tick
   void _checkAlarm(alarm){
-    if(alarm.time <= DateTime.now().minute && alarm.isSet == true){
-      print('beep');
-      alarm.isSet = false;
-      alarm.start();
+    print('${alarm.time} // ${DateTime.now()}');
+    if(alarm.time.hour == DateTime.now().hour && alarm.isSet == true){
+      if(alarm.time.minute <= DateTime.now().minute){
+        print('beep');
+        alarm.isSet = false;
+        alarm.start(context);
+      }
     }
   }
 

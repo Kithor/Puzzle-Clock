@@ -4,9 +4,8 @@ import 'dart:math';
 class Scramble extends StatelessWidget{
   	TextEditingController _controller;
   	
-@override
+  @override
   Widget build (BuildContext context){
-
       var time = new DateTime.now();
       String w = logicWordPicker();
       String s = logicScrambler(w);
@@ -34,45 +33,45 @@ class Scramble extends StatelessWidget{
           ),
         ],
       );
-    }
   }
+}
 
   /* THIS IS THE LOGIC FOR THE PUZZLE BELOW*/
 
-  String logicWordPicker(){
+String logicWordPicker(){
 
-    // List of words available
-    var wordlist = ["diary","apple","plain","ghost","nerds","fruit","giant","mouse","horse","spoon"];
-    var rng = new Random();
-    
-    // Selects a Random Word
-    var wordnum = rng.nextInt(wordlist.length);
-    var word = wordlist[wordnum];
+  // List of words available
+  var wordlist = ["diary","apple","plain","ghost","nerds","fruit","giant","mouse","horse","spoon"];
+  var rng = new Random();
   
-    return(word);
+  // Selects a Random Word
+  var wordnum = rng.nextInt(wordlist.length);
+  var word = wordlist[wordnum];
+
+  return(word);
 }
 
 String logicScrambler(String word){
-    var rng = new Random();
-    var temp;
-    var i;
-    i = 0;
-    var charactered = ["","","","",""];
+  var rng = new Random();
+  var temp;
+  var i;
+  i = 0;
+  var charactered = ["","","","",""];
 
-    word.runes.forEach((int rune) {
-        var character = new String.fromCharCode(rune);
-        charactered[i] = character;
-        i++;
-    });
-    
-    //Scrambles the word
-    i = 0;
-    for(int j = 0; j > 5; j++){
-        var loc = rng.nextInt(3);
-        temp = charactered[i];
-        charactered[i] = charactered [loc];
-        charactered[loc] = temp;
-        i++;
-    };
-    return(charactered.toString());
+  word.runes.forEach((int rune) {
+      var character = new String.fromCharCode(rune);
+      charactered[i] = character;
+      i++;
+  });
+  
+  //Scrambles the word
+  i = 0;
+  for(int j = 0; j > 5; j++){
+      var loc = rng.nextInt(3);
+      temp = charactered[i];
+      charactered[i] = charactered [loc];
+      charactered[loc] = temp;
+      i++;
+  }
+  return(charactered.toString());
 }

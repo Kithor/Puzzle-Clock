@@ -1,5 +1,8 @@
+import './puzzles/puzzle.dart';
+
 class Alarm{
   static List<Alarm> alarmList = [];
+  static var clockStarted = false;
   var name;
   var time;
   var repeatedFor = {
@@ -10,7 +13,7 @@ class Alarm{
 
   Alarm(){
     this.name = 'defaut';
-    this.time = '12:00';
+    this.time = new DateTime.now().minute + 5;
     this.isSet = false;
   }
 
@@ -23,11 +26,11 @@ class Alarm{
     //find alarm by name and remove it from list of alarms
   }
 
-  void start(){
-    /* Start a loop playing the sound until puzzle is complete.
-    We will probably want to play with isolates here. I don't think
-    we will be able to run both a puzzle and the sound. If anyone
-    wants to look into that.*/
+  void start(context){
+    /* Notification with sound */
+    //trigger puzzle
+    print('trigger puzzle');
+    puzzlePicker(context);
   }
 }
 
