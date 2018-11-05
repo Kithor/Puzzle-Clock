@@ -29,7 +29,6 @@ class Alarm{
   void start(context){
     /* Notification with sound */
     //trigger puzzle
-    print('trigger puzzle');
     puzzlePicker(context);
   }
 }
