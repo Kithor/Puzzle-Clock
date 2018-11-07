@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'dart:async';
 import 'alarm.dart';
 import 'edit.dart';
@@ -22,8 +23,14 @@ class _AppState extends State<App>{
       initialItems: Alarm.alarmList,
       removedItemBuilder: _buildRemovedItem,
     );
-    print(_list._items);
+    _cancelNotification();
     _startClock();
+
+    /* Initialize Local Notifications */
+    var androidSettings = new AndroidInitializationSettings('ic_launcher');
+    var iOSSettings = new IOSInitializationSettings();
+    var initializationSettings = new InitializationSettings(androidSettings, iOSSettings);
+    localNotifications.initialize(initializationSettings);
   }
 
   // Used to build list items that haven't been removed.
@@ -96,6 +103,7 @@ class _AppState extends State<App>{
     if(alarm.time.hour == DateTime.now().hour && alarm.isSet == true){
       if(alarm.time.minute <= DateTime.now().minute){
         alarm.isSet = false;
+        _showNotification();
         alarm.start(context);
       }
     }
@@ -137,6 +145,31 @@ class _AppState extends State<App>{
         ),
       ),
     );
+  }
+
+  /* Notification functions */
+  Future _showNotification() async {
+    var androidSpecifics = new AndroidNotificationDetails(
+        'your channel id', 'your channel name', 'your channel description',
+        importance: Importance.Max, priority: Priority.High);
+    var iOSSpecifics = new IOSNotificationDetails();
+    var platformChannelSpecifics = new NotificationDetails(androidSpecifics, iOSSpecifics);
+    await localNotifications.show(
+        0, 'plain title', 'plain body', platformChannelSpecifics, payload: 'item x');
+  }
+
+  Future _cancelNotification() async {
+    await localNotifications.cancel(0);
+  }
+
+  Future _onSelectNotification(String payload) async {
+    if (payload != null) {
+      debugPrint('notification payload: ' + payload);
+    }
+
+    /*await Navigator.push(context,
+      new MaterialPageRoute(builder: (context) => new SecondScreen(payload)),
+    );*/
   }
 }
 
@@ -236,7 +269,10 @@ class CardItem extends StatelessWidget {                                //Card I
   }
 }
 
-main() {
+FlutterLocalNotificationsPlugin localNotifications;
+
+main() async{
+  localNotifications = new FlutterLocalNotificationsPlugin();
   runApp(
     new MaterialApp(
       home: App(),

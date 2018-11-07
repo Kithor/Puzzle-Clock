@@ -10,22 +10,28 @@ class Math extends StatefulWidget{
 class _MathState extends State<Math>{
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   var _eqn;	
+  var count = 0;
   
   @override  
   void initState(){
     super.initState();
     _eqn = createEqn();
-    print(_eqn);
   }
 
   void submit(){
     _formKey.currentState.save();
-    //this is where you would write conditions to create another eqn
-    dispose();
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => App()),
-    );
+    if(count < 2){
+      setState(() {
+        _eqn = createEqn();
+      });
+    } else {
+      super.dispose();
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => App()),
+      );
+    }
+    count++;
   }
 
   @override
