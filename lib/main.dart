@@ -225,10 +225,34 @@ class CardItem extends StatelessWidget {                                //Card I
             height: 128.0,
             child: Card(
               color: Colors.lightBlue,
-              child: Center(
-                child: Text(item.name, style: textStyle),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0, bottom: 16.0),
+                          child: Text(item.name, style: textStyle)
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
+                          child: Text(item.time.toString(), style: TextStyle(fontWeight: FontWeight.bold)),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(right: 16.0),
+                    child: Icon(
+                      Icons.alarm,
+                      color: Colors.white,
+                      size: 50.0,
+                    ),
+                  ),
+                ],
               ),
-            ),
+            )
           ),
         ),
       ),
