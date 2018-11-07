@@ -1,40 +1,73 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+import '../main.dart';
 
-class Scramble extends StatelessWidget{
-  	TextEditingController _controller;
-  	
+class Scramble extends StatefulWidget{
+  @override
+  _ScrambleState createState() => _ScrambleState();
+}
+
+class _ScrambleState extends State<Scramble>{
+  final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+  TextEditingController _controller;
+  
+  @override  
+  void initState(){
+    super.initState();
+  }
+
+  void submit(){
+    _formKey.currentState.save();
+    dispose();
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => App()),
+    );
+  }
+  
   @override
   Widget build (BuildContext context){
-      var time = new DateTime.now();
-      String w = logicWordPicker();
-      String s = logicScrambler(w);
+    var time = new DateTime.now();
+    String w = logicWordPicker();
+    String s = logicScrambler(w);
 
-        return new Column(
-          children: <Widget>[
-              Text('Time to Wake Up!'),
-              Text(time.toString()),
-              Text('Unscramble the world to silence the alarm.'),
-              Text(s),
-              new TextField(
-                controller: _controller,
+      return Scaffold(
+        appBar: AppBar(
+          title: Text("New Alarm")
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: this._formKey,
+            child: Column(
+              children: <Widget>[
+
+                Text('Current Time: '),
+                Text(time.toString()),
+                Text('Unscramble the word!'),
+                Text(s),
+
+                TextField(
+                  controller: _controller,
+                ),
+
+                RaisedButton(
+                  onPressed: (){
+                    if(_controller.text == w){
+                      this.submit();
+                    }
+                    else{
+                      _controller.clear();
+                    }
+                  },
+                child: new Text("Try Again!"),
               ),
-              new RaisedButton(
-                onPressed: (){
-                if(_controller.text == w){
-                  //Turn Alarm Off
-                  //Navigate to main page
-                }
-                else{
-                  _controller.clear();
-                }
-              },
-          child: new Text("Try Again!"),
-          ),
-        ],
-      );
+            ],
+          )
+        ),
+      ),
+    );
   }
-}
 
   /* THIS IS THE LOGIC FOR THE PUZZLE BELOW*/
 
@@ -74,4 +107,5 @@ String logicScrambler(String word){
       i++;
   }
   return(charactered.toString());
+}
 }
