@@ -40,7 +40,15 @@ class _MathState extends State<Math>{
       appBar: AppBar(
         title: Text("New Alarm")
       ),
-      body: Padding(
+      body: 
+      new Container(
+        decoration: new BoxDecoration(
+          image: new DecorationImage(
+            image: new AssetImage("images/background.jpg"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child:Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: this._formKey,
@@ -48,7 +56,8 @@ class _MathState extends State<Math>{
             children: <Widget>[
               Text ('${_eqn['num1']} ${_eqn['op']} ${_eqn['num2']} =',
                 style: new TextStyle(
-                  fontSize: 90.0
+                  fontSize: 90.0,
+                  color: Colors.white
                 ),
               ),
               TextFormField(
@@ -58,7 +67,7 @@ class _MathState extends State<Math>{
                 ),                  
                 style: new TextStyle(
                   fontSize: 40.0,
-                  color: Colors.black            
+                  color: Colors.white            
                 ),
                 validator: (value){
                   if(value.toString().isEmpty){
@@ -82,6 +91,7 @@ class _MathState extends State<Math>{
           )
         )
       )
+    )
     );
   }
 }

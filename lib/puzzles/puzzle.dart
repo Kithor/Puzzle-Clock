@@ -30,13 +30,13 @@ void puzzlePicker(BuildContext context){
     if(choice == 2){
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => Math()),
+        MaterialPageRoute(builder: (context) => Scramble()),
       );  
     }
     if(choice == 3){
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => Math()),
+        MaterialPageRoute(builder: (context) => Scramble()),
       );
     }
 }

@@ -29,14 +29,23 @@ class _EditAlarmState extends State<EditAlarm>{
       appBar: AppBar(
         title: Text("New Alarm")
       ),
-      body: Padding(
+      body: 
+      new Container(
+        decoration: new BoxDecoration(
+          image: new DecorationImage(
+            image: new AssetImage("images/background.jpg"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child:Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: this._formKey,
           child: ListView(
             children: <Widget>[
               TextFormField(
-                  decoration: InputDecoration(labelText: 'Name'),
+                  style: TextStyle(color: Colors.white),
+                  decoration: InputDecoration(labelText: 'Name', labelStyle: TextStyle(color: Colors.white)),
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'Please enter an alarm name';
@@ -47,8 +56,9 @@ class _EditAlarmState extends State<EditAlarm>{
                   }
                 ),
               TimePickerFormField(
+                style: TextStyle(color: Colors.white),
                 format: DateFormat("h:mm a"),
-                decoration: InputDecoration(labelText: 'Time'),
+                decoration: InputDecoration(labelText: 'Time', labelStyle: TextStyle(color: Colors.white)),
                 validator: (value) {
                   if (value.toString().isEmpty) {
                     return 'Please enter a time';
@@ -73,6 +83,7 @@ class _EditAlarmState extends State<EditAlarm>{
           )
         )
       )
+    )
     );
   }
 }
