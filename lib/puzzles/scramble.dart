@@ -33,7 +33,8 @@ class _ScrambleState extends State<Scramble>{
 
       return Scaffold(
         appBar: AppBar(
-          title: Text("New Alarm")
+          title: Text("Unscramlbe"),
+          leading: new Container()
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),

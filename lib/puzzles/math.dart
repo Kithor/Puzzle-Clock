@@ -38,7 +38,8 @@ class _MathState extends State<Math>{
   Widget build (BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        title: Text("New Alarm")
+        title: Text("Math Problem"),
+        leading: new Container()
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
