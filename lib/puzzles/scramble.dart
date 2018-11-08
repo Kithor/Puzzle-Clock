@@ -31,7 +31,8 @@ class _ScrambleState extends State<Scramble>{
   Widget build (BuildContext context){
       return Scaffold(
         appBar: AppBar(
-          title: Text("New Alarm")
+          title: Text("Unscramlbe"),
+          leading: new Container()
         ),
         body: 
         new Container(

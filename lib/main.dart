@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:intl/intl.dart';
 import 'dart:async';
 import 'alarm.dart';
 import 'edit.dart';
@@ -12,6 +14,7 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App>{
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
+  final audioPlayer = new AudioPlayer();
   ListModel _list;
   var _selectedItem;
 
@@ -23,6 +26,7 @@ class _AppState extends State<App>{
       initialItems: Alarm.alarmList,
       removedItemBuilder: _buildRemovedItem,
     );
+    audioPlayer.stop();
     _cancelNotification();
     _startClock();
 
@@ -98,12 +102,14 @@ class _AppState extends State<App>{
   }
 
   //A function to check the list for an alarm every tick
-  void _checkAlarm(alarm){
+  void _checkAlarm(alarm) async{
     print('${alarm.time} // ${DateTime.now()}');
     if(alarm.time.hour == DateTime.now().hour && alarm.isSet == true){
       if(alarm.time.minute <= DateTime.now().minute){
         alarm.isSet = false;
-        _showNotification();
+        _showNotification(alarm);
+        await audioPlayer.setReleaseMode(ReleaseMode.LOOP);
+        await audioPlayer.play('./audioLib/deja.mp3', isLocal: true);
         alarm.start(context);
       }
     }
@@ -157,28 +163,18 @@ class _AppState extends State<App>{
  }
 
   /* Notification functions */
-  Future _showNotification() async {
+  Future _showNotification(alarm) async {
     var androidSpecifics = new AndroidNotificationDetails(
         'your channel id', 'your channel name', 'your channel description',
         importance: Importance.Max, priority: Priority.High);
     var iOSSpecifics = new IOSNotificationDetails();
     var platformChannelSpecifics = new NotificationDetails(androidSpecifics, iOSSpecifics);
     await localNotifications.show(
-        0, 'plain title', 'plain body', platformChannelSpecifics, payload: 'item x');
+        0, 'Alarm', '${alarm.time.hour}:${alarm.time.minute}', platformChannelSpecifics, payload: 'item x');
   }
 
   Future _cancelNotification() async {
     await localNotifications.cancel(0);
-  }
-
-  Future _onSelectNotification(String payload) async {
-    if (payload != null) {
-      debugPrint('notification payload: ' + payload);
-    }
-
-    /*await Navigator.push(context,
-      new MaterialPageRoute(builder: (context) => new SecondScreen(payload)),
-    );*/
   }
 }
 
@@ -279,7 +275,11 @@ class CardItem extends StatelessWidget {                                //Card I
                         ),
                         Container(
                           padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
-                          child: Text(item.time.toString(), style: TextStyle(fontWeight: FontWeight.bold)),
+                          child: Text(DateFormat('jm').format(item.time), 
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold)
+                          ),
                         ),
                       ],
                     ),
