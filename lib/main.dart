@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 import 'alarm.dart';
@@ -13,6 +14,7 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App>{
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
+  final audioPlayer = new AudioPlayer();
   ListModel _list;
   var _selectedItem;
 
@@ -24,6 +26,7 @@ class _AppState extends State<App>{
       initialItems: Alarm.alarmList,
       removedItemBuilder: _buildRemovedItem,
     );
+    audioPlayer.stop();
     _cancelNotification();
     _startClock();
 
@@ -99,12 +102,14 @@ class _AppState extends State<App>{
   }
 
   //A function to check the list for an alarm every tick
-  void _checkAlarm(alarm){
+  void _checkAlarm(alarm) async{
     print('${alarm.time} // ${DateTime.now()}');
     if(alarm.time.hour == DateTime.now().hour && alarm.isSet == true){
       if(alarm.time.minute <= DateTime.now().minute){
         alarm.isSet = false;
         _showNotification(alarm);
+        await audioPlayer.setReleaseMode(ReleaseMode.LOOP);
+        await audioPlayer.play('./audioLib/deja.mp3', isLocal: true);
         alarm.start(context);
       }
     }
