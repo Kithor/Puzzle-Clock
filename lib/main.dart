@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 import 'alarm.dart';
@@ -14,7 +13,6 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App>{
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
-  final audioPlayer = new AudioPlayer();
   ListModel _list;
   var _selectedItem;
 
@@ -26,7 +24,9 @@ class _AppState extends State<App>{
       initialItems: Alarm.alarmList,
       removedItemBuilder: _buildRemovedItem,
     );
-    audioPlayer.stop();
+    if(Alarm.audioPlayer != null){
+      Alarm.stop();
+    }
     _cancelNotification();
     _startClock();
 
@@ -88,6 +88,7 @@ class _AppState extends State<App>{
   // Start the clock to check every minute for an alarm
   void _startClock(){
     if(Alarm.clockStarted == false){
+      Alarm.loadAudio();
       new Timer.periodic(new Duration(milliseconds: 5), (syncTimer) { //Sync Timer (syncTimer)
         if(DateTime.now().second == 00){
           Timer.periodic(const Duration(minutes:1), (periodTimer) { //Periodic Timer (_)
@@ -108,8 +109,6 @@ class _AppState extends State<App>{
       if(alarm.time.minute <= DateTime.now().minute){
         alarm.isSet = false;
         _showNotification(alarm);
-        await audioPlayer.setReleaseMode(ReleaseMode.LOOP);
-        await audioPlayer.play('./audioLib/deja.mp3', isLocal: true);
         alarm.start(context);
       }
     }

@@ -1,8 +1,12 @@
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 import './puzzles/puzzle.dart';
 
 class Alarm{
   static List<Alarm> alarmList = [];
   static var clockStarted = false;
+  static AudioCache audioCache = new AudioCache();
+  static AudioPlayer audioPlayer;
   var name;
   var time;
   var repeatedFor = {
@@ -21,14 +25,17 @@ class Alarm{
     this.isSet = true;
     alarmList.add(this);
   }
-  
-  void removeAlarm(var name){
-    //find alarm by name and remove it from list of alarms
+
+  static void loadAudio(){
+    audioCache.loadAll(['audio/deja.mp3','audio/stars.mp3']);
   }
 
-  void start(context){
-    /* Notification with sound */
-    //trigger puzzle
+  static void stop(){
+    audioPlayer.stop();
+  }
+
+  void start(context) async{
+    audioPlayer = await audioCache.loop('audio/stars.mp3');
     puzzlePicker(context);
   }
 }

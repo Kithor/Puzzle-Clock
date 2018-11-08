@@ -20,7 +20,6 @@ class _EditAlarmState extends State<EditAlarm>{
       context,
       MaterialPageRoute(builder: (context) => App()),
     );
-    //Navigator.pop(context);
   }
 
   @override
