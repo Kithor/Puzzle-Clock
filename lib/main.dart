@@ -140,7 +140,15 @@ class _AppState extends State<App>{
             ),
           ],
         ),
-        body: Padding(
+        body:
+        new Container(
+        decoration: new BoxDecoration(
+          image: new DecorationImage(
+            image: new AssetImage("assets/images/background.jpg"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: AnimatedList(
             key: _listKey,
@@ -149,8 +157,9 @@ class _AppState extends State<App>{
           ),
         ),
       ),
-    );
-  }
+    )
+  );
+ }
 
   /* Notification functions */
   Future _showNotification(alarm) async {

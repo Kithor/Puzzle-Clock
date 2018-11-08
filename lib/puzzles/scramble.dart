@@ -9,11 +9,13 @@ class Scramble extends StatefulWidget{
 
 class _ScrambleState extends State<Scramble>{
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
-  TextEditingController _controller;
+  var w,s;
   
   @override  
   void initState(){
     super.initState();
+    w = logicWordPicker();
+    s = logicScrambler(w);
   }
 
   void submit(){
@@ -27,46 +29,58 @@ class _ScrambleState extends State<Scramble>{
   
   @override
   Widget build (BuildContext context){
-    var time = new DateTime.now();
-    String w = logicWordPicker();
-    String s = logicScrambler(w);
-
       return Scaffold(
         appBar: AppBar(
           title: Text("Unscramlbe"),
           leading: new Container()
         ),
-        body: Padding(
+        body: 
+        new Container(
+        decoration: new BoxDecoration(
+          image: new DecorationImage(
+            image: new AssetImage("assets/images/background.jpg"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child:Padding(
           padding: const EdgeInsets.all(16.0),
           child: Form(
             key: this._formKey,
             child: Column(
               children: <Widget>[
 
-                Text('Current Time: '),
-                Text(time.toString()),
-                Text('Unscramble the word!'),
-                Text(s),
+                Text('Unscramble the word!', style: TextStyle(fontSize: 20.0, color: Colors.white)),
+                Text(s, style: TextStyle(fontSize: 40.0, color: Colors.white)),
 
-                TextField(
-                  controller: _controller,
+                TextFormField(
+                  style: TextStyle(color: Colors.white),
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value){
+                    if(value.toString().isEmpty){
+                      return 'Please enter an answer';
+                    }
+                    if(value.toString() != w.toString()){
+                      return 'Incorrect Answer';
+                    }
+                  }
                 ),
-
+                
                 RaisedButton(
-                  onPressed: (){
-                    if(_controller.text == w){
-                      this.submit();
+                  child: const Text('Solve'),
+                  onPressed: () {
+                    if (_formKey.currentState.validate()) {
+                        this.submit();
                     }
-                    else{
-                      _controller.clear();
-                    }
-                  },
-                child: new Text("Try Again!"),
+                  }
               ),
             ],
           )
         ),
       ),
+    )
     );
   }
 
@@ -88,8 +102,7 @@ String logicWordPicker(){
 String logicScrambler(String word){
   var rng = new Random();
   var temp;
-  var i;
-  i = 0;
+  var i = 0;
   var charactered = ["","","","",""];
 
   word.runes.forEach((int rune) {
@@ -100,13 +113,13 @@ String logicScrambler(String word){
   
   //Scrambles the word
   i = 0;
-  for(int j = 0; j > 5; j++){
-      var loc = rng.nextInt(3);
-      temp = charactered[i];
-      charactered[i] = charactered [loc];
-      charactered[loc] = temp;
-      i++;
-  }
+    charactered.forEach((rune){
+        var loc = rng.nextInt(3);
+        temp = charactered[i];
+        charactered[i] = charactered [loc];
+        charactered[loc] = temp;
+        i++;
+    });
   return(charactered.toString());
-}
+  } 
 }
