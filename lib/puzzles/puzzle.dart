@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'scramble.dart';
 import 'math.dart';
+import 'riddle.dart';
 
 class Puzzle{
   static List puzzleList;
@@ -14,7 +15,6 @@ void puzzlePicker(BuildContext context){
     //Picks a random puzzle from the four and navigates to the appropriate page
     var rng = new Random();
     var choice = rng.nextInt(3);
-
     if(choice == 0){
       Navigator.push(
         context,
@@ -24,7 +24,7 @@ void puzzlePicker(BuildContext context){
     if(choice == 1){
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => Math()),
+        MaterialPageRoute(builder: (context) => Riddle()),
       );  
     }
     if(choice == 2){
